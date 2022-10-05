@@ -4,6 +4,9 @@ const { ethers } = require("hardhat");
 
 const localChainId = "31337";
 
+const BASE_FEE = "250000000000000000"; // 0.25 is this the premium in LINK?
+const GAS_PRICE_LINK = 1e9;
+
 // const sleep = (ms) =>
 //   new Promise((r) =>
 //     setTimeout(() => {
@@ -17,16 +20,29 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   const { deployer } = await getNamedAccounts();
   const chainId = await getChainId();
 
-  await deploy("YourContract", {
+  await deploy("Patcoin", {
+    from: deployer,
+    args: [ethers.utils.parseEther("1000")],
+    log: true,
+    waitConfirmations: 5,
+  });
+
+  const royaltyToken = await ethers.getContract("Patcoin", deployer);
+
+  await deploy("SimpleStorage", {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
     // args: [ "Hello", ethers.utils.parseEther("1.5") ],
+    args: [true, 0, 11457551, royaltyToken.address],
     log: true,
     waitConfirmations: 5,
   });
 
   // Getting a previously deployed contract
-  const YourContract = await ethers.getContract("YourContract", deployer);
+  const YourContract = await ethers.getContract("SimpleStorage", deployer);
+
+
+
   /*  await YourContract.setPurpose("Hello");
   
     // To take ownership of yourContract using the ownable library uncomment next line and add the 
@@ -79,4 +95,4 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   //   console.error(error);
   // }
 };
-module.exports.tags = ["YourContract"];
+module.exports.tags = ["SimpleStorage"];

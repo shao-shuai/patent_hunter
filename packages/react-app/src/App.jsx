@@ -293,6 +293,9 @@ function App(props) {
         <Menu.Item key="/debug">
           <Link to="/debug">Debug Contracts</Link>
         </Menu.Item>
+        <Menu.Item key="/erc20">
+          <Link to="/erc20">Debug ERC20 Contracts</Link>
+        </Menu.Item>
         <Menu.Item key="/hints">
           <Link to="/hints">Hints</Link>
         </Menu.Item>
@@ -320,7 +323,24 @@ function App(props) {
             */}
 
           <Contract
-            name="YourContract"
+            name="SimpleStorage"
+            price={price}
+            signer={userSigner}
+            provider={localProvider}
+            address={address}
+            blockExplorer={blockExplorer}
+            contractConfig={contractConfig}
+          />
+        </Route>
+        <Route exact path="/erc20">
+          {/*
+                🎛 this scaffolding is full of commonly used components
+                this <Contract/> component will automatically parse your ABI
+                and give you a form to interact with it locally
+            */}
+
+          <Contract
+            name="Patcoin"
             price={price}
             signer={userSigner}
             provider={localProvider}
